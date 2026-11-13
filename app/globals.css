@@ -1,0 +1,85 @@
+@import "tailwindcss";
+
+/* AdsAssist marketing site. Neutral page; the logo's blue-violet gradient only on buttons and highlights. */
+@theme {
+  --font-sans: var(--font-inter), ui-sans-serif, system-ui, sans-serif;
+
+  --color-ink: #0b1220;
+  --color-ink-soft: #3d4757;
+  --color-ink-muted: #667085;
+  --color-line: #e6e8ee;
+  --color-line-strong: #d3d7e0;
+  --color-paper: #ffffff;
+  --color-mist: #f6f7fa;
+  --color-navy: #061d50;
+
+  --color-cyan: #05c4f4;
+  --color-blue: #075cf6;
+  --color-violet: #7400ef;
+  --color-blue-soft: #eef3ff;
+
+  --color-good: #12b76a;
+  --color-good-soft: #e8f8ef;
+  --color-bad: #e5484d;
+  --color-bad-soft: #fdeceb;
+  --color-warn: #f59e0b;
+  --color-meta: #8b5cf6;
+
+  --shadow-card: 0 1px 2px rgb(11 18 32 / 0.04), 0 8px 24px rgb(11 18 32 / 0.06);
+  --shadow-float: 0 2px 6px rgb(11 18 32 / 0.06), 0 24px 60px rgb(7 92 246 / 0.12);
+}
+
+@layer base {
+  html {
+    scroll-behavior: smooth;
+    -webkit-tap-highlight-color: transparent;
+  }
+  body {
+    background: var(--color-paper);
+    color: var(--color-ink);
+    font-family: var(--font-sans);
+    -webkit-font-smoothing: antialiased;
+  }
+  ::selection {
+    background: rgb(7 92 246 / 0.15);
+  }
+  :focus-visible {
+    outline: 2px solid var(--color-blue);
+    outline-offset: 2px;
+    border-radius: 6px;
+  }
+}
+
+@utility bg-brand {
+  background-image: linear-gradient(110deg, var(--color-cyan) -10%, var(--color-blue) 40%, var(--color-violet) 110%);
+}
+@utility text-brand {
+  background-image: linear-gradient(100deg, var(--color-blue) 0%, var(--color-violet) 100%);
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+}
+@utility tabular {
+  font-variant-numeric: tabular-nums;
+}
+
+/* Faint grid behind the hero. */
+@utility bg-grid {
+  background-image:
+    linear-gradient(to right, rgb(11 18 32 / 0.045) 1px, transparent 1px),
+    linear-gradient(to bottom, rgb(11 18 32 / 0.045) 1px, transparent 1px);
+  background-size: 44px 44px;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  html {
+    scroll-behavior: auto;
+  }
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+  }
+}
