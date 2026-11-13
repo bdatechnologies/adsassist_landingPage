@@ -83,3 +83,40 @@
     transition-duration: 0.01ms !important;
   }
 }
+
+/* Body text of the legal pages. */
+.legal p + p,
+.legal p + ul,
+.legal ul + p,
+.legal table + p,
+.legal p + table {
+  margin-top: 1rem;
+}
+.legal ul {
+  list-style: disc;
+  padding-left: 1.25rem;
+}
+.legal ul ul {
+  margin-top: 0.5rem;
+}
+.legal li + li {
+  margin-top: 0.5rem;
+}
+.legal strong {
+  color: var(--color-ink);
+  font-weight: 600;
+}
+.legal a {
+  color: var(--color-blue);
+  font-weight: 500;
+}
+.legal a:hover {
+  text-decoration: underline;
+}
+.legal code {
+  font-size: 0.875em;
+  background: var(--color-mist);
+  border: 1px solid var(--color-line);
+  border-radius: 6px;
+  padding: 0.1em 0.35em;
+}
