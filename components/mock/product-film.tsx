@@ -55,16 +55,17 @@ function ConnectScene() {
   )
 }
 
+// `label` is not shown on screen; it only names each progress bar for screen readers.
 const SCENES = [
-  { key: "connect", label: "Connect", caption: "Sign in with Google and Meta. Your last 30 days load right away.", render: () => <ConnectScene /> },
-  { key: "dashboard", label: "Dashboard", caption: "Spend, leads and cost per lead across every account, updated every 15 minutes.", render: () => <DashboardMock compact /> },
-  { key: "keywords", label: "Wasted spend", caption: "Keywords that spend without converting get flagged automatically.", render: () => <KeywordsMock /> },
-  { key: "pipeline", label: "Pipeline", caption: "Every lead followed from the ad click to the sale.", render: () => <PipelineMock /> },
-  { key: "sendback", label: "Send back", caption: "Approvals go back to Google and Meta so bidding finds more customers.", render: () => <SendBackMock /> },
+  { key: "connect", label: "Connect", render: () => <ConnectScene /> },
+  { key: "dashboard", label: "Dashboard", render: () => <DashboardMock compact /> },
+  { key: "keywords", label: "Wasted spend", render: () => <KeywordsMock /> },
+  { key: "pipeline", label: "Pipeline", render: () => <PipelineMock /> },
+  { key: "sendback", label: "Send back", render: () => <SendBackMock /> },
 ]
 
 /**
- * The hero "film": product scenes that play in sequence like a video, with chapters and a progress bar.
+ * The hero "film": product scenes that play in sequence like a video, with a progress bar per scene.
  * It pauses off screen, on hover, and for people who prefer reduced motion.
  */
 export function ProductFilm() {
@@ -130,7 +131,7 @@ export function ProductFilm() {
         </AnimatePresence>
       </div>
 
-      <div className="mt-4 flex items-start gap-3">
+      <div className="mt-4 flex items-center gap-3">
         <button
           onClick={() => setPaused((p) => !p)}
           className="grid size-11 shrink-0 place-items-center rounded-full border border-line bg-paper text-ink-soft shadow-card transition-colors hover:text-ink sm:size-9"
@@ -138,41 +139,25 @@ export function ProductFilm() {
         >
           {paused ? <Play className="size-4" /> : <Pause className="size-4" />}
         </button>
-        <div className="min-w-0 flex-1">
-          <div className="flex gap-1.5" role="tablist" aria-label="Product tour chapters">
-            {SCENES.map((s, i) => (
-              <button
-                key={s.key}
-                role="tab"
-                aria-selected={i === index}
-                onClick={() => go(i)}
-                className="group flex-1 text-left"
-              >
-                <span className="block h-1 overflow-hidden rounded-full bg-line">
-                  <span
-                    className="bg-brand block h-1 rounded-full"
-                    style={{ width: i < index ? "100%" : i === index ? `${(elapsed / SCENE_MS) * 100}%` : "0%" }}
-                  />
-                </span>
-                <span className={cn("mt-1.5 hidden truncate text-[11px] font-semibold sm:block", i === index ? "text-ink" : "text-ink-muted group-hover:text-ink-soft")}>
-                  {s.label}
-                </span>
-              </button>
-            ))}
-          </div>
-          {/* Same trick for the caption: the longest one reserves its lines so the text below does not shift. */}
-          <div className="mt-2 grid text-sm text-ink-soft *:[grid-area:1/1]">
-            {SCENES.map((s) => (
-              <p key={s.key} className="invisible" aria-hidden>
-                {s.caption}
-              </p>
-            ))}
-            <AnimatePresence mode="wait">
-              <motion.p key={scene.key} initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }}>
-                {scene.caption}
-              </motion.p>
-            </AnimatePresence>
-          </div>
+        <div className="flex min-w-0 flex-1 gap-1.5" role="tablist" aria-label="Product tour chapters">
+          {SCENES.map((s, i) => (
+            <button
+              key={s.key}
+              role="tab"
+              aria-selected={i === index}
+              aria-label={s.label}
+              onClick={() => go(i)}
+              // The bar is 4px tall; the padding gives it a comfortable tap area (44px on phones).
+              className="group flex-1 cursor-pointer py-5 sm:py-3"
+            >
+              <span className="block h-1 overflow-hidden rounded-full bg-line transition-colors group-hover:bg-line-strong">
+                <span
+                  className="bg-brand block h-1 rounded-full"
+                  style={{ width: i < index ? "100%" : i === index ? `${(elapsed / SCENE_MS) * 100}%` : "0%" }}
+                />
+              </span>
+            </button>
+          ))}
         </div>
       </div>
     </div>
