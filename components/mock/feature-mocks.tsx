@@ -109,7 +109,7 @@ const EVENTS = [
 
 const TONE: Record<string, string> = {
   blue: "bg-blue-soft text-blue",
-  meta: "bg-violet-50 text-meta",
+  meta: "bg-violet-50 text-meta dark:bg-meta/15",
   good: "bg-good-soft text-good",
   bad: "bg-bad-soft text-bad",
   ink: "bg-mist text-ink-soft",
@@ -137,8 +137,9 @@ export function TrackingMock() {
             Live
           </span>
         </div>
-        <div className="mt-3 space-y-2">
-          <AnimatePresence initial={false}>
+        {/* popLayout lifts the exiting row out of flow, so the list stays 4 rows tall instead of briefly growing to 5. */}
+        <div className="relative mt-3 space-y-2">
+          <AnimatePresence initial={false} mode="popLayout">
             {rows.map((e) => (
               <motion.div
                 key={e.id}
@@ -216,8 +217,15 @@ export function PipelineMock({ stages = STAGES }: { stages?: { key: string; labe
           })}
         </div>
         <div className="mt-4 space-y-1.5 border-t border-line pt-3 text-[11px] text-ink-muted">
-          {stages.slice(0, at + 1).map((s, i) => (
-            <motion.p key={s.key} initial={{ opacity: 0, x: -6 }} animate={{ opacity: 1, x: 0 }} className="flex items-center gap-2">
+          {/* Every line is always rendered (hidden until reached) so the card keeps a fixed height as the log fills. */}
+          {stages.map((s, i) => (
+            <motion.p
+              key={s.key}
+              initial={false}
+              animate={i <= at ? { opacity: 1, x: 0 } : { opacity: 0, x: -6 }}
+              aria-hidden={i > at}
+              className="flex items-center gap-2"
+            >
               <span className="size-1.5 rounded-full bg-blue" />
               Moved to <span className="font-semibold text-ink">{s.label}</span> {i === 0 ? "by pixel" : i === stages.length - 1 ? "by CRM" : "by Rahul (sales)"}
             </motion.p>
@@ -309,12 +317,17 @@ export function AudiencesMock() {
         <div className="relative mt-4 grid h-28 place-items-center rounded-xl bg-mist">
           {dots.map((i) => {
             const a = (i / dots.length) * Math.PI * 2
+            // Whole pixels, so server and browser render the same transform (no hydration mismatch).
+            const ox = Math.round(Math.cos(a) * 120)
+            const oy = Math.round(Math.sin(a) * 44)
+            const ix = Math.round(Math.cos(a) * 26)
+            const iy = Math.round(Math.sin(a) * 26)
             return (
               <motion.span
                 key={i}
                 className={cn("absolute size-2.5 rounded-full", i % 3 === 0 ? "bg-meta" : "bg-blue")}
-                initial={{ x: Math.cos(a) * 120, y: Math.sin(a) * 44, opacity: 0.5 }}
-                animate={active ? { x: [Math.cos(a) * 120, Math.cos(a) * 26, Math.cos(a) * 120], y: [Math.sin(a) * 44, Math.sin(a) * 26, Math.sin(a) * 44], opacity: [0.5, 1, 0.5] } : undefined}
+                initial={{ x: ox, y: oy, opacity: 0.5 }}
+                animate={active ? { x: [ox, ix, ox], y: [oy, iy, oy], opacity: [0.5, 1, 0.5] } : undefined}
                 transition={{ duration: 4, repeat: Infinity, delay: i * 0.05, ease: "easeInOut" }}
               />
             )

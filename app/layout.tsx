@@ -3,6 +3,7 @@ import { Inter } from "next/font/google"
 import { SiteFooter } from "@/components/site-footer"
 import { SiteHeader } from "@/components/site-header"
 import { SITE_URL } from "@/lib/site"
+import { THEME_SCRIPT } from "@/lib/theme"
 import "./globals.css"
 
 const inter = Inter({ variable: "--font-inter", subsets: ["latin"], display: "swap" })
@@ -17,11 +18,20 @@ export const metadata: Metadata = {
   alternates: { canonical: "/" },
 }
 
-export const viewport: Viewport = { themeColor: "#ffffff" }
+export const viewport: Viewport = {
+  themeColor: [
+    { media: "(prefers-color-scheme: light)", color: "#ffffff" },
+    { media: "(prefers-color-scheme: dark)", color: "#0a0a0a" },
+  ],
+}
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {
   return (
-    <html lang="en-IN" className={inter.variable}>
+    // The theme script adds the `dark` class before hydration, hence suppressHydrationWarning.
+    <html lang="en-IN" className={inter.variable} suppressHydrationWarning>
+      <head>
+        <script dangerouslySetInnerHTML={{ __html: THEME_SCRIPT }} />
+      </head>
       <body className="min-h-screen overflow-x-clip">
         <a href="#main" className="sr-only focus:not-sr-only focus:fixed focus:top-3 focus:left-3 focus:z-[60] focus:rounded-lg focus:bg-paper focus:px-4 focus:py-2 focus:shadow-card">
           Skip to content

@@ -1,0 +1,2 @@
+/* Runs in <head> before paint: a saved choice wins, otherwise follow the system setting. */
+export const THEME_SCRIPT = `(function(){try{var d=document.documentElement,m=window.matchMedia("(prefers-color-scheme: dark)"),s=localStorage.getItem("theme");d.classList.toggle("dark",s?s==="dark":m.matches);m.addEventListener("change",function(e){if(!localStorage.getItem("theme"))d.classList.toggle("dark",e.matches)})}catch(e){}})()`

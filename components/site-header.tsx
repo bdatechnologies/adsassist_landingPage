@@ -5,6 +5,7 @@ import { usePathname } from "next/navigation"
 import { useEffect, useState } from "react"
 import { AnimatePresence, motion } from "motion/react"
 import { ChevronDown, Menu, X } from "lucide-react"
+import { ThemeToggle } from "@/components/theme-toggle"
 import { ButtonLink, Container } from "@/components/ui"
 import { APP_URL, INDUSTRIES } from "@/lib/site"
 import { cn } from "@/lib/cn"
@@ -40,7 +41,9 @@ export function SiteHeader() {
       <Container className="flex h-16 items-center justify-between gap-6">
         <Link href="/" className="shrink-0" aria-label="AdsAssist home">
           {/* eslint-disable-next-line @next/next/no-img-element */}
-          <img src="/brand/AdsAssist_Logo.svg" alt="AdsAssist" width={147} height={36} className="h-8 w-auto" />
+          <img src="/brand/AdsAssist_Logo.svg" alt="AdsAssist" width={147} height={36} className="h-8 w-auto dark:hidden" />
+          {/* eslint-disable-next-line @next/next/no-img-element */}
+          <img src="/brand/AdsAssist_Logo_For_Dark.svg" alt="AdsAssist" width={147} height={36} className="hidden h-8 w-auto dark:block" />
         </Link>
 
         <nav className="hidden items-center gap-1 lg:flex" aria-label="Main">
@@ -76,6 +79,7 @@ export function SiteHeader() {
         </nav>
 
         <div className="hidden items-center gap-2 lg:flex">
+          <ThemeToggle />
           <ButtonLink href={APP_URL} variant="ghost" size="sm">
             Log in
           </ButtonLink>
@@ -84,8 +88,10 @@ export function SiteHeader() {
           </ButtonLink>
         </div>
 
+        <div className="-mr-2 flex items-center gap-1 lg:hidden">
+        <ThemeToggle />
         <button
-          className="-mr-2 rounded-lg p-2 lg:hidden"
+          className="rounded-lg p-2"
           onClick={() => {
             setMenuFor(pathname)
             setOpen((o) => !(o && menuFor === pathname))
@@ -95,6 +101,7 @@ export function SiteHeader() {
         >
           {mobileOpen ? <X className="size-6" /> : <Menu className="size-6" />}
         </button>
+        </div>
       </Container>
 
       <AnimatePresence>

@@ -6,7 +6,7 @@ import { Check, Pause, Play } from "lucide-react"
 import { cn } from "@/lib/cn"
 import { DashboardMock } from "./dashboard-mock"
 import { KeywordsMock, PipelineMock, SendBackMock } from "./feature-mocks"
-import { AppWindow, useLoopInView } from "./shared"
+import { AppWindow, LoopPausedContext, useLoopInView } from "./shared"
 
 const SCENE_MS = 5200
 
@@ -107,7 +107,16 @@ export function ProductFilm() {
 
   return (
     <div ref={ref} onMouseEnter={() => setHover(true)} onMouseLeave={() => setHover(false)} className="relative">
-      <div className="relative min-h-[23rem] sm:min-h-[25rem]">
+      {/*
+        Every scene sits in the same grid cell. The inactive copies are invisible and paused; they only
+        reserve space, so the frame is always as tall as the tallest scene and the controls below never move.
+      */}
+      <div className="relative grid *:[grid-area:1/1]">
+        {SCENES.map((s) => (
+          <div key={s.key} className="invisible" aria-hidden inert>
+            <LoopPausedContext value={true}>{s.render()}</LoopPausedContext>
+          </div>
+        ))}
         <AnimatePresence mode="wait">
           <motion.div
             key={scene.key}
@@ -151,17 +160,19 @@ export function ProductFilm() {
               </button>
             ))}
           </div>
-          <AnimatePresence mode="wait">
-            <motion.p
-              key={scene.key}
-              initial={{ opacity: 0 }}
-              animate={{ opacity: 1 }}
-              exit={{ opacity: 0 }}
-              className="mt-2 text-sm text-ink-soft"
-            >
-              {scene.caption}
-            </motion.p>
-          </AnimatePresence>
+          {/* Same trick for the caption: the longest one reserves its lines so the text below does not shift. */}
+          <div className="mt-2 grid text-sm text-ink-soft *:[grid-area:1/1]">
+            {SCENES.map((s) => (
+              <p key={s.key} className="invisible" aria-hidden>
+                {s.caption}
+              </p>
+            ))}
+            <AnimatePresence mode="wait">
+              <motion.p key={scene.key} initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }}>
+                {scene.caption}
+              </motion.p>
+            </AnimatePresence>
+          </div>
         </div>
       </div>
     </div>

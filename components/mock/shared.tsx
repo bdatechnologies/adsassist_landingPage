@@ -1,7 +1,7 @@
 "use client"
 
 import { animate, useInView, useMotionValue, useReducedMotion, useTransform, motion } from "motion/react"
-import { useEffect, useRef } from "react"
+import { createContext, useContext, useEffect, useRef } from "react"
 import { cn } from "@/lib/cn"
 
 /** Product-screen frame: a window with the app's chrome, used by every mockup. */
@@ -71,10 +71,14 @@ export function MetaDot({ className }: { className?: string }) {
   return <span className={cn("inline-block size-2 rounded-full bg-meta", className)} aria-hidden />
 }
 
+/** Set to true around mockups rendered only to reserve space (invisible), so their loops never run. */
+export const LoopPausedContext = createContext(false)
+
 /** True while the element is on screen; mockups pause their loops off screen. */
 export function useLoopInView<T extends Element>() {
   const ref = useRef<T>(null)
   const inView = useInView(ref, { margin: "-60px" })
   const reduce = useReducedMotion()
-  return { ref, active: inView && !reduce, reduce: Boolean(reduce) }
+  const paused = useContext(LoopPausedContext)
+  return { ref, active: inView && !reduce && !paused, reduce: Boolean(reduce) }
 }

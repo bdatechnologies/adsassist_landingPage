@@ -1,14 +1,16 @@
-import Link from "next/link"
-import { ArrowRight, Building2, Check, Eye, FileSpreadsheet, KeyRound, Layers, Lock, ShieldCheck, Users, X } from "lucide-react"
+import { Check, Eye, KeyRound, Layers, Lock, ShieldCheck, Users } from "lucide-react"
 import { CtaBand } from "@/components/cta"
+import { ExcelCompare, ExcelQuote } from "@/components/excel-compare"
 import { FaqSection, type Faq } from "@/components/faq"
+import { HowItWorks } from "@/components/how-it-works"
+import { Industries } from "@/components/industries"
+import { AgencySwitcher } from "@/components/mock/agency-switcher"
 import { DashboardMock } from "@/components/mock/dashboard-mock"
 import { AudiencesMock, InsightsMock, KeywordsMock, PipelineMock, SendBackMock, TrackingMock } from "@/components/mock/feature-mocks"
 import { ProductFilm } from "@/components/mock/product-film"
 import { ProblemNumbers } from "@/components/problem-numbers"
 import { Reveal } from "@/components/reveal"
 import { ButtonLink, Container, Eyebrow, SectionHeading } from "@/components/ui"
-import { INDUSTRIES } from "@/lib/site"
 
 const FEATURES = [
   {
@@ -172,74 +174,23 @@ export default function HomePage() {
 
       {/* Excel */}
       <section className="py-20 sm:py-28">
-        <Container className="grid items-center gap-12 lg:grid-cols-2 [&>*]:min-w-0">
+        <Container className="grid items-center gap-12 lg:grid-cols-[minmax(0,0.9fr)_minmax(0,1.1fr)] [&>*]:min-w-0">
           <Reveal>
             <SectionHeading
               eyebrow="No more waiting for the Excel report"
               title="Still checking your ads in an Excel sheet?"
               lead="For most businesses, someone updates an Excel sheet by hand once a day, and it gets compared with old numbers once a month. By then the money is already spent. With AdsAssist, you open your dashboard whenever you want and see where every rupee went, compared with last week or last month in one click."
             />
-            <p className="mt-6 border-l-2 border-blue pl-4 text-lg font-medium">When your agency or media buyer knows you can check anytime, they stay on their toes.</p>
+            <ExcelQuote>When your agency or media buyer knows you can check anytime, they stay on their toes.</ExcelQuote>
           </Reveal>
           <Reveal delay={0.1}>
-            <div className="grid overflow-hidden rounded-2xl border border-line shadow-card sm:grid-cols-2 [&>*]:min-w-0">
-              <div className="bg-mist p-6">
-                <p className="flex items-center gap-2 text-sm font-semibold text-ink-muted">
-                  <FileSpreadsheet className="size-4" aria-hidden /> Before
-                </p>
-                <ul className="mt-5 space-y-4">
-                  {["An Excel sheet, updated by hand once a day", "Compared with old data once a month", "You take the agency's word for it"].map((t) => (
-                    <li key={t} className="flex gap-3 text-ink-soft">
-                      <X className="mt-0.5 size-4 shrink-0 text-bad" aria-hidden /> {t}
-                    </li>
-                  ))}
-                </ul>
-              </div>
-              <div className="bg-paper p-6">
-                <p className="flex items-center gap-2 text-sm font-semibold text-blue">
-                  <span className="bg-brand size-2 rounded-full" aria-hidden /> With AdsAssist
-                </p>
-                <ul className="mt-5 space-y-4">
-                  {["Numbers that update on their own every 15 minutes", "Compare any two periods, any time you want", "You see the same numbers your agency sees"].map((t) => (
-                    <li key={t} className="flex gap-3 font-medium">
-                      <Check className="mt-0.5 size-4 shrink-0 text-good" aria-hidden /> {t}
-                    </li>
-                  ))}
-                </ul>
-              </div>
-            </div>
+            <ExcelCompare />
           </Reveal>
         </Container>
       </section>
 
       {/* How it works */}
-      <section id="how-it-works" className="scroll-mt-20 bg-navy py-20 text-white sm:py-28">
-        <Container>
-          <Reveal>
-            <SectionHeading
-              eyebrow="How it works"
-              title="Three steps to cost per customer."
-              className="[&_h2]:text-white [&_p]:text-cyan"
-            />
-          </Reveal>
-          <ol className="relative mt-14 grid gap-6 md:grid-cols-3 [&>*]:min-w-0">
-            <div className="bg-brand absolute top-6 right-[16%] left-[16%] hidden h-px opacity-60 md:block" aria-hidden />
-            {[
-              { t: "Connect Google Ads and Meta.", d: "Sign in with Google and Meta and pick your ad accounts. Your last 30 days load right away." },
-              { t: "Add one line of code to your site.", d: "The AdsAssist pixel records visits and form fills and links each one to the ad that brought it. Prefer your CRM? Send leads through our API." },
-              { t: "Follow every lead to the sale.", d: "Move leads through your own pipeline stages, or let your CRM update them. AdsAssist shows what each stage cost you, campaign by campaign." },
-            ].map((s, i) => (
-              <Reveal key={s.t} delay={i * 0.12}>
-                <li className="relative">
-                  <span className="bg-brand relative grid size-12 place-items-center rounded-2xl text-lg font-semibold shadow-[0_0_0_6px_var(--color-navy)] [&>*]:min-w-0">{i + 1}</span>
-                  <h3 className="mt-6 text-xl font-semibold">{s.t}</h3>
-                  <p className="mt-3 leading-relaxed text-white/70">{s.d}</p>
-                </li>
-              </Reveal>
-            ))}
-          </ol>
-        </Container>
-      </section>
+      <HowItWorks />
 
       {/* Features */}
       <section id="features" className="scroll-mt-20 py-20 sm:py-28">
@@ -277,26 +228,7 @@ export default function HomePage() {
       </section>
 
       {/* Industries */}
-      <section className="border-y border-line bg-mist py-20 sm:py-28">
-        <Container>
-          <Reveal>
-            <SectionHeading eyebrow="Built for your business" title="Made for businesses where a lead isn't a sale yet." />
-          </Reveal>
-          <div className="mt-12 grid gap-4 sm:grid-cols-2 lg:grid-cols-4 [&>*]:min-w-0">
-            {INDUSTRIES.map((ind, i) => (
-              <Reveal key={ind.href} delay={i * 0.08}>
-                <Link href={ind.href} className="group flex h-full flex-col rounded-2xl border border-line bg-paper p-6 shadow-card transition-all hover:-translate-y-1 hover:shadow-float">
-                  <h3 className="text-lg font-semibold">{ind.label}</h3>
-                  <p className="mt-2 flex-1 leading-relaxed text-ink-soft">{ind.blurb}</p>
-                  <span className="mt-6 inline-flex items-center gap-1.5 text-sm font-semibold text-blue">
-                    Learn more <ArrowRight className="size-4 transition-transform group-hover:translate-x-1" aria-hidden />
-                  </span>
-                </Link>
-              </Reveal>
-            ))}
-          </div>
-        </Container>
-      </section>
+      <Industries />
 
       {/* Agencies */}
       <section className="py-20 sm:py-28">
@@ -310,7 +242,9 @@ export default function HomePage() {
             <ul className="mt-6 space-y-3">
               {["Roles: owner, admin, analyst, viewer", "A weekly report per client", "Switch between clients in one click"].map((p) => (
                 <li key={p} className="flex gap-3">
-                  <Check className="mt-0.5 size-5 shrink-0 text-blue" aria-hidden />
+                  <span className="mt-0.5 grid size-5 shrink-0 place-items-center rounded-full bg-blue-soft">
+                    <Check className="size-3 text-blue" aria-hidden />
+                  </span>
                   <span className="text-ink-soft">{p}</span>
                 </li>
               ))}
@@ -327,60 +261,43 @@ export default function HomePage() {
 
       {/* Security */}
       <section id="security" className="scroll-mt-20 border-t border-line bg-mist py-20 sm:py-28">
-        <Container>
+        <Container className="grid items-center gap-10 lg:grid-cols-[minmax(0,0.8fr)_minmax(0,1.2fr)] lg:gap-16">
           <Reveal>
             <SectionHeading eyebrow="Security" title="Built to be trusted with your data." />
           </Reveal>
-          <div className="mt-12 grid gap-4 sm:grid-cols-2 lg:grid-cols-4 [&>*]:min-w-0">
-            {[
-              { icon: KeyRound, t: "Official sign-in", d: "Connects through official Google and Meta sign-in. We never see your passwords." },
-              { icon: Eye, t: "Read-only Google Ads", d: "AdsAssist reports; it never changes campaigns, bids or budgets." },
-              { icon: ShieldCheck, t: "Hashed contact details", d: "Contact details are hashed (SHA-256) before they reach any ad platform." },
-              { icon: Users, t: "Role-based access", d: "Role-based access in every workspace." },
-            ].map((s, i) => (
-              <Reveal key={s.t} delay={i * 0.08}>
-                <div className="h-full rounded-2xl border border-line bg-paper p-6">
-                  <s.icon className="size-6 text-blue" aria-hidden />
-                  <h3 className="mt-4 font-semibold">{s.t}</h3>
-                  <p className="mt-2 text-sm leading-relaxed text-ink-soft">{s.d}</p>
-                </div>
-              </Reveal>
-            ))}
-          </div>
+          <Reveal delay={0.1}>
+            {/* Spec sheet: one panel, cells split by hairlines */}
+            <ul className="grid gap-px overflow-hidden rounded-2xl border border-line bg-line shadow-card sm:grid-cols-2">
+              {[
+                { icon: KeyRound, t: "Official sign-in", d: <>Connects through official Google and Meta sign-in. We never see your passwords.</> },
+                { icon: Eye, t: "Read-only Google Ads", d: <>AdsAssist reports; it never changes campaigns, bids or budgets.</> },
+                {
+                  icon: ShieldCheck,
+                  t: "Hashed contact details",
+                  d: (
+                    <>
+                      Contact details are hashed (<code className="font-mono text-[0.9em] whitespace-nowrap text-ink">SHA-256</code>) before they reach any ad platform.
+                    </>
+                  ),
+                },
+                { icon: Users, t: "Role-based access", d: <>Role-based access in every workspace.</> },
+              ].map((s) => (
+                <li key={s.t} className="group relative bg-paper p-6 sm:p-8">
+                  <span className="absolute inset-x-0 top-0 h-0.5 origin-left scale-x-0 bg-blue transition-transform duration-500 group-hover:scale-x-100" aria-hidden />
+                  <span className="grid size-10 place-items-center rounded-xl bg-blue-soft text-blue transition-colors duration-300 group-hover:bg-blue group-hover:text-white">
+                    <s.icon className="size-5" aria-hidden />
+                  </span>
+                  <h3 className="mt-5 text-lg font-semibold">{s.t}</h3>
+                  <p className="mt-2 leading-relaxed text-ink-soft">{s.d}</p>
+                </li>
+              ))}
+            </ul>
+          </Reveal>
         </Container>
       </section>
 
       <FaqSection items={FAQS} />
       <CtaBand title="Stop paying for leads that never close." body="Book a demo and we'll show you, on your own ad accounts, which campaigns bring customers." />
     </>
-  )
-}
-
-function AgencySwitcher() {
-  const clients = [
-    { n: "Sunrise Finance", s: "₹4.2L", l: "1,180 leads", c: "bg-blue" },
-    { n: "Brightpath Academy", s: "₹2.7L", l: "2,340 sign-ups", c: "bg-meta" },
-    { n: "Skyline Homes", s: "₹6.1L", l: "96 site visits", c: "bg-cyan" },
-    { n: "Ledgerly", s: "₹1.9L", l: "212 paying users", c: "bg-good" },
-  ]
-  return (
-    <div className="rounded-2xl border border-line bg-paper p-5 shadow-float">
-      <div className="flex items-center gap-2 text-sm font-semibold">
-        <Building2 className="size-4 text-blue" aria-hidden /> Growthline Agency · 4 clients
-      </div>
-      <div className="mt-4 space-y-2">
-        {clients.map((c) => (
-          <div key={c.n} className="flex items-center gap-3 rounded-xl border border-line px-4 py-3 transition-colors hover:bg-mist">
-            <span className={`grid size-8 place-items-center rounded-lg text-xs font-semibold text-white ${c.c}`}>{c.n[0]}</span>
-            <div className="min-w-0 flex-1">
-              <p className="truncate text-sm font-semibold">{c.n}</p>
-              <p className="text-xs text-ink-muted">{c.l} this month</p>
-            </div>
-            <span className="tabular text-sm font-semibold">{c.s}</span>
-          </div>
-        ))}
-      </div>
-      <p className="mt-4 text-xs text-ink-muted">Sample data. Each client sees only their own workspace.</p>
-    </div>
   )
 }

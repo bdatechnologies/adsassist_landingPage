@@ -14,7 +14,9 @@ export function SiteFooter() {
       <Container className="grid gap-10 py-14 md:grid-cols-[1.4fr_repeat(3,1fr)]">
         <div className="max-w-xs">
           {/* eslint-disable-next-line @next/next/no-img-element */}
-          <img src="/brand/AdsAssist_Logo.svg" alt="AdsAssist" width={147} height={36} className="h-8 w-auto" />
+          <img src="/brand/AdsAssist_Logo.svg" alt="AdsAssist" width={147} height={36} className="h-8 w-auto dark:hidden" />
+          {/* eslint-disable-next-line @next/next/no-img-element */}
+          <img src="/brand/AdsAssist_Logo_For_Dark.svg" alt="AdsAssist" width={147} height={36} className="hidden h-8 w-auto dark:block" />
           <p className="mt-4 text-sm leading-relaxed text-ink-muted">Know which ad brought every customer. Google Ads and Meta, connected to your leads and sales.</p>
         </div>
         {COLUMNS.map((c) => (
