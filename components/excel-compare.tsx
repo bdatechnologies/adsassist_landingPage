@@ -2,53 +2,54 @@
 
 import { motion, useReducedMotion } from "motion/react"
 import { Check, FileSpreadsheet, X } from "lucide-react"
+import { ScrollWords } from "@/components/scroll-motion"
 
 const BEFORE = ["An Excel sheet, updated by hand once a day", "Compared with old data once a month", "You take the agency's word for it"]
 const AFTER = ["Numbers that update on their own every 15 minutes", "Compare any two periods, any time you want", "You see the same numbers your agency sees"]
 
-const ease = [0.22, 1, 0.36, 1] as const
+const ease = [0.16, 1, 0.3, 1] as const
 
 /**
- * Before / With AdsAssist side by side. Both columns share rows (subgrid),
+ * Before / With AdsAssist as two tiles. Both tiles share rows (subgrid),
  * so each pair lines up even when one side wraps to more lines.
  */
 export function ExcelCompare() {
   const reduce = useReducedMotion()
-  const fade = (delay: number, x = 0) => ({
-    variants: { hidden: { opacity: reduce ? 1 : 0, x: reduce ? 0 : x }, shown: { opacity: 1, x: 0 } },
-    transition: reduce ? { duration: 0 } : { duration: 0.35, delay, ease },
+  const fade = (delay: number, y = 10) => ({
+    variants: { hidden: { opacity: reduce ? 1 : 0, y: reduce ? 0 : y }, shown: { opacity: 1, y: 0 } },
+    transition: reduce ? { duration: 0 } : { duration: 0.7, delay, ease },
   })
 
   return (
     <motion.div
-      className="grid overflow-hidden rounded-2xl border border-line shadow-card sm:grid-cols-2 sm:grid-rows-[auto_auto_auto_auto]"
+      className="mx-auto grid max-w-5xl gap-4 sm:grid-cols-2 sm:grid-rows-[auto_auto_auto_auto] sm:gap-x-5 sm:gap-y-0"
       initial="hidden"
       whileInView="shown"
-      viewport={{ once: true, margin: "-80px" }}
+      viewport={{ once: true, margin: "-100px" }}
     >
       {/* Before */}
-      <div className="grid gap-y-4 bg-mist p-6 sm:row-span-4 sm:grid-rows-subgrid sm:gap-y-5">
-        <p className="flex items-center gap-2 pb-1 text-sm font-semibold text-ink-muted">
-          <FileSpreadsheet className="size-4" aria-hidden /> Before
+      <div className="grid gap-y-5 rounded-[28px] bg-mist p-7 sm:row-span-4 sm:grid-rows-subgrid sm:gap-y-6 sm:p-10">
+        <p className="flex items-center gap-2 text-[15px] font-semibold text-ink-muted sm:text-[17px]">
+          <FileSpreadsheet className="size-5" aria-hidden /> Before
         </p>
         {BEFORE.map((t, i) => (
-          <motion.p key={t} className="flex gap-3 text-ink-soft" {...fade(0.05 + i * 0.06)}>
-            <X className="mt-1 size-4 shrink-0 text-bad" aria-hidden /> {t}
+          <motion.p key={t} className="flex gap-3 text-[17px] leading-snug text-ink-muted sm:text-[19px]" {...fade(0.05 + i * 0.08)}>
+            <X className="mt-0.5 size-5 shrink-0 text-bad/80" aria-hidden /> {t}
           </motion.p>
         ))}
       </div>
 
       {/* With AdsAssist */}
-      <div className="grid gap-y-4 bg-paper p-6 sm:row-span-4 sm:grid-rows-subgrid sm:gap-y-5">
-        <p className="flex items-center gap-2 pb-1 text-sm font-semibold text-blue">
-          <span className="bg-brand size-2 rounded-full" aria-hidden /> With AdsAssist
+      <div className="grid gap-y-5 rounded-[28px] bg-paper p-7 shadow-float ring-1 ring-line sm:row-span-4 sm:grid-rows-subgrid sm:gap-y-6 sm:p-10">
+        <p className="flex items-center gap-2 text-[15px] font-semibold text-blue sm:text-[17px]">
+          <span className="bg-brand size-2.5 rounded-full" aria-hidden /> With AdsAssist
         </p>
         {AFTER.map((t, i) => (
-          <motion.p key={t} className="flex gap-3 font-medium" {...fade(0.3 + i * 0.1, -8)}>
+          <motion.p key={t} className="flex gap-3 text-[17px] leading-snug font-medium tracking-[-0.01em] sm:text-[19px]" {...fade(0.3 + i * 0.1)}>
             <motion.span
-              className="mt-0.5 grid size-5 shrink-0 place-items-center rounded-full bg-good-soft text-good"
+              className="mt-0.5 grid size-5 shrink-0 place-items-center rounded-full bg-good text-white"
               variants={{ hidden: { scale: reduce ? 1 : 0 }, shown: { scale: 1 } }}
-              transition={reduce ? { duration: 0 } : { type: "spring", stiffness: 500, damping: 20, delay: 0.38 + i * 0.1 }}
+              transition={reduce ? { duration: 0 } : { type: "spring", stiffness: 420, damping: 22, delay: 0.4 + i * 0.1 }}
               aria-hidden
             >
               <Check className="size-3" strokeWidth={3} />
@@ -61,18 +62,12 @@ export function ExcelCompare() {
   )
 }
 
-/** Closing line with a left bar that draws down. */
-export function ExcelQuote({ children }: { children: React.ReactNode }) {
-  const reduce = useReducedMotion()
+/** Closing line: a large statement that lights up word by word as it scrolls past. */
+export function ExcelQuote({ children }: { children: string }) {
   return (
-    <motion.p className="relative mt-6 pl-4 text-lg font-medium" initial="hidden" whileInView="shown" viewport={{ once: true, margin: "-60px" }}>
-      <motion.span
-        className="absolute top-0 left-0 h-full w-0.5 origin-top rounded-full bg-blue"
-        variants={{ hidden: { scaleY: reduce ? 1 : 0 }, shown: { scaleY: 1 } }}
-        transition={reduce ? { duration: 0 } : { duration: 0.5, delay: 0.15, ease }}
-        aria-hidden
-      />
-      {children}
-    </motion.p>
+    <ScrollWords
+      text={children}
+      className="mx-auto mt-20 max-w-4xl text-center text-[28px] leading-[1.2] font-semibold tracking-[-0.03em] sm:mt-28 sm:text-[40px] sm:leading-[1.15] lg:text-[48px]"
+    />
   )
 }

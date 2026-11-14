@@ -1,16 +1,18 @@
-import { Check, Eye, KeyRound, Layers, Lock, ShieldCheck, Users } from "lucide-react"
+import { Check, Eye, KeyRound, Layers, ShieldCheck, Users } from "lucide-react"
 import { CtaBand } from "@/components/cta"
 import { ExcelCompare, ExcelQuote } from "@/components/excel-compare"
 import { FaqSection, type Faq } from "@/components/faq"
+import { Hero } from "@/components/hero"
 import { HowItWorks } from "@/components/how-it-works"
 import { Industries } from "@/components/industries"
 import { AgencySwitcher } from "@/components/mock/agency-switcher"
 import { DashboardMock } from "@/components/mock/dashboard-mock"
 import { AudiencesMock, InsightsMock, KeywordsMock, PipelineMock, SendBackMock, TrackingMock } from "@/components/mock/feature-mocks"
-import { ProductFilm } from "@/components/mock/product-film"
 import { ProblemNumbers } from "@/components/problem-numbers"
 import { Reveal } from "@/components/reveal"
-import { ButtonLink, Container, Eyebrow, SectionHeading } from "@/components/ui"
+import { ScrollScale } from "@/components/scroll-motion"
+import { Container, Eyebrow, SectionHeading } from "@/components/ui"
+import { cn } from "@/lib/cn"
 
 const FEATURES = [
   {
@@ -103,68 +105,27 @@ const FAQS: Faq[] = [
 export default function HomePage() {
   return (
     <>
-      {/* Hero */}
-      <section className="relative overflow-hidden">
-        <div className="bg-grid absolute inset-0 [mask-image:radial-gradient(ellipse_at_top,black_30%,transparent_75%)] [&>*]:min-w-0" aria-hidden />
-        <div className="bg-brand absolute -top-48 right-[-10rem] h-[30rem] w-[30rem] rounded-full opacity-[0.13] blur-3xl" aria-hidden />
-        <Container className="relative grid items-center gap-12 pt-14 pb-20 sm:pt-20 lg:grid-cols-[1fr_1.05fr] lg:pb-28 [&>*]:min-w-0">
-          <Reveal>
-            <Eyebrow>From click to customer</Eyebrow>
-            <h1 className="mt-4 text-[42px] leading-[1.05] font-semibold tracking-[-0.025em] text-balance sm:text-6xl">
-              Know which ad brought <span className="text-brand">every customer.</span>
-            </h1>
-            <p className="mt-6 max-w-xl text-lg leading-relaxed text-pretty text-ink-soft sm:text-xl">
-              AdsAssist shows you which of those ads actually brought you paying customers, so you can put more money behind the ones that work and stop wasting it on the rest.
-            </p>
-            <div className="mt-9 flex flex-col gap-3 sm:flex-row">
-              <ButtonLink href="/demo" size="lg" arrow>
-                Book a demo
-              </ButtonLink>
-              <ButtonLink href="#how-it-works" size="lg" variant="secondary">
-                See how it works
-              </ButtonLink>
-            </div>
-            <p className="mt-5 flex flex-wrap items-center gap-x-4 gap-y-1 text-sm text-ink-muted">
-              <span className="flex items-center gap-1.5">
-                <Lock className="size-3.5" aria-hidden /> Read-only access
-              </span>
-              <span className="flex items-center gap-1.5">
-                <span className="size-1.5 rounded-full bg-good" aria-hidden /> Updates every 15 min
-              </span>
-            </p>
-          </Reveal>
-          <Reveal delay={0.15}>
-            <ProductFilm />
-          </Reveal>
-        </Container>
-      </section>
+      <Hero />
 
       {/* Problem */}
-      <section className="border-y border-line bg-mist py-20 sm:py-28">
+      <section className="bg-mist py-24 sm:py-32 lg:py-40">
         <Container>
           <Reveal>
-            <SectionHeading
-              eyebrow="The problem"
-              title="Your ad platforms count clicks. Your business counts customers."
-              lead="Google reports 120 conversions. Meta reports 85. Your sales team closed 9. Which campaign did those 9 come from? Nobody knows, so next month's budget goes to whatever looked cheapest per lead."
-            />
+            <SectionHeading center eyebrow="The problem" title="Your ad platforms count clicks. Your business counts customers." className="max-w-4xl" />
           </Reveal>
-          <Reveal delay={0.1}>
-            <ProblemNumbers />
-          </Reveal>
-          <div className="mt-12 grid gap-4 md:grid-cols-3 [&>*]:min-w-0">
+          {/* The body copy: its first three sentences set as figures, the rest as a closing statement. */}
+          <ProblemNumbers rest="Which campaign did those 9 come from? Nobody knows, so next month's budget goes to whatever looked cheapest per lead." />
+          <div className="mt-20 grid gap-4 sm:mt-28 md:grid-cols-3 lg:gap-5 *:min-w-0">
             {[
               { icon: Layers, t: "Two dashboards, two sets of numbers.", d: "Google Ads and Meta count results differently, in different places." },
               { icon: KeyRound, t: "Cheap leads can be expensive.", d: "A ₹150 lead that never picks up the phone costs more than a ₹600 lead who buys." },
               { icon: Eye, t: "Leads go missing after the form.", d: "You can't see where people drop off between the click and the sale." },
             ].map((c, i) => (
-              <Reveal key={c.t} delay={i * 0.08}>
-                <div className="h-full rounded-2xl border border-line bg-paper p-6 shadow-card">
-                  <span className="grid size-10 place-items-center rounded-xl bg-blue-soft text-blue [&>*]:min-w-0">
-                    <c.icon className="size-5" aria-hidden />
-                  </span>
-                  <h3 className="mt-5 text-lg font-semibold">{c.t}</h3>
-                  <p className="mt-2 leading-relaxed text-ink-soft">{c.d}</p>
+              <Reveal key={c.t} delay={i * 0.08} className="h-full">
+                <div className="h-full rounded-[28px] bg-paper p-7 sm:p-8">
+                  <c.icon className="size-8 text-blue" strokeWidth={1.5} aria-hidden />
+                  <h3 className="mt-6 text-[21px] leading-[1.2] font-semibold tracking-[-0.02em] sm:text-2xl">{c.t}</h3>
+                  <p className="mt-3 text-[17px] leading-[1.5] text-ink-soft">{c.d}</p>
                 </div>
               </Reveal>
             ))}
@@ -173,19 +134,21 @@ export default function HomePage() {
       </section>
 
       {/* Excel */}
-      <section className="py-20 sm:py-28">
-        <Container className="grid items-center gap-12 lg:grid-cols-[minmax(0,0.9fr)_minmax(0,1.1fr)] [&>*]:min-w-0">
+      <section className="py-24 sm:py-32 lg:py-40">
+        <Container>
           <Reveal>
             <SectionHeading
+              center
               eyebrow="No more waiting for the Excel report"
               title="Still checking your ads in an Excel sheet?"
               lead="For most businesses, someone updates an Excel sheet by hand once a day, and it gets compared with old numbers once a month. By then the money is already spent. With AdsAssist, you open your dashboard whenever you want and see where every rupee went, compared with last week or last month in one click."
+              className="max-w-3xl"
             />
-            <ExcelQuote>When your agency or media buyer knows you can check anytime, they stay on their toes.</ExcelQuote>
           </Reveal>
-          <Reveal delay={0.1}>
+          <div className="mt-14 sm:mt-20">
             <ExcelCompare />
-          </Reveal>
+          </div>
+          <ExcelQuote>When your agency or media buyer knows you can check anytime, they stay on their toes.</ExcelQuote>
         </Container>
       </section>
 
@@ -193,34 +156,31 @@ export default function HomePage() {
       <HowItWorks />
 
       {/* Features */}
-      <section id="features" className="scroll-mt-20 py-20 sm:py-28">
+      <section id="features" className="scroll-mt-14 py-24 sm:py-32 lg:py-40">
         <Container>
           <Reveal>
-            <SectionHeading center eyebrow="Features" title="Everything between the ad click and the sale." />
+            <SectionHeading center title="Features" />
           </Reveal>
-          <div className="mt-16 space-y-24 sm:space-y-32">
+          <div className="mt-16 space-y-28 sm:mt-24 sm:space-y-36 lg:space-y-44">
             {FEATURES.map((f, i) => (
-              <div key={f.id} id={f.id} className="grid scroll-mt-24 items-center gap-10 lg:grid-cols-2 lg:gap-16 [&>*]:min-w-0">
+              <div
+                key={f.id}
+                id={f.id}
+                className={cn(
+                  "grid scroll-mt-24 items-center gap-10 lg:gap-16 *:min-w-0",
+                  // The product screen always gets the wider column, whichever side it is on.
+                  i % 2 ? "lg:grid-cols-[minmax(0,7fr)_minmax(0,5fr)]" : "lg:grid-cols-[minmax(0,5fr)_minmax(0,7fr)]",
+                )}
+              >
                 <Reveal className={i % 2 ? "lg:order-2" : undefined}>
                   <Eyebrow>{f.tag}</Eyebrow>
-                  <h3 className="mt-3 text-3xl leading-tight font-semibold tracking-tight text-balance">{f.title}</h3>
-                  <p className="mt-4 text-lg leading-relaxed text-ink-soft">{f.body}</p>
-                  {f.points.length ? (
-                    <ul className="mt-6 space-y-3">
-                      {f.points.map((p) => (
-                        <li key={p} className="flex gap-3">
-                          <span className="mt-0.5 grid size-5 shrink-0 place-items-center rounded-full bg-blue-soft [&>*]:min-w-0">
-                            <Check className="size-3 text-blue" aria-hidden />
-                          </span>
-                          <span className="text-ink-soft">{p}</span>
-                        </li>
-                      ))}
-                    </ul>
-                  ) : null}
+                  <h3 className="mt-3 text-[32px] leading-[1.1] font-semibold tracking-[-0.03em] text-balance sm:text-[40px] sm:leading-[1.08]">{f.title}</h3>
+                  <p className="mt-5 text-[17px] leading-[1.5] tracking-[-0.01em] text-pretty text-ink-soft sm:text-[19px]">{f.body}</p>
+                  {f.points.length ? <PointList points={f.points} className="mt-8" /> : null}
                 </Reveal>
-                <Reveal delay={0.1} className={i % 2 ? "lg:order-1" : undefined}>
+                <ScrollScale className={i % 2 ? "lg:order-1" : undefined}>
                   {f.mock}
-                </Reveal>
+                </ScrollScale>
               </div>
             ))}
           </div>
@@ -231,73 +191,71 @@ export default function HomePage() {
       <Industries />
 
       {/* Agencies */}
-      <section className="py-20 sm:py-28">
-        <Container className="grid items-center gap-12 lg:grid-cols-2 [&>*]:min-w-0">
+      <section className="py-24 sm:py-32 lg:py-40">
+        <Container className="grid items-center gap-10 lg:grid-cols-[minmax(0,5fr)_minmax(0,7fr)] lg:gap-16 *:min-w-0">
           <Reveal>
             <SectionHeading
               eyebrow="For agencies"
               title="One login for every client."
               lead="A workspace per client, each with its own ad accounts, currency and time zone. Clients get view-only access to their own numbers."
             />
-            <ul className="mt-6 space-y-3">
-              {["Roles: owner, admin, analyst, viewer", "A weekly report per client", "Switch between clients in one click"].map((p) => (
-                <li key={p} className="flex gap-3">
-                  <span className="mt-0.5 grid size-5 shrink-0 place-items-center rounded-full bg-blue-soft">
-                    <Check className="size-3 text-blue" aria-hidden />
-                  </span>
-                  <span className="text-ink-soft">{p}</span>
-                </li>
-              ))}
-            </ul>
-            <ButtonLink href="/agencies" variant="secondary" arrow className="mt-8">
-              AdsAssist for agencies
-            </ButtonLink>
+            <PointList points={["Roles: owner, admin, analyst, viewer", "A weekly report per client", "Switch between clients in one click"]} className="mt-8" />
           </Reveal>
-          <Reveal delay={0.1}>
+          <ScrollScale>
             <AgencySwitcher />
-          </Reveal>
+          </ScrollScale>
         </Container>
       </section>
 
       {/* Security */}
-      <section id="security" className="scroll-mt-20 border-t border-line bg-mist py-20 sm:py-28">
-        <Container className="grid items-center gap-10 lg:grid-cols-[minmax(0,0.8fr)_minmax(0,1.2fr)] lg:gap-16">
+      <section id="security" className="scroll-mt-14 bg-mist py-24 sm:py-32 lg:py-40">
+        <Container>
           <Reveal>
-            <SectionHeading eyebrow="Security" title="Built to be trusted with your data." />
+            <SectionHeading center eyebrow="Security" title="Built to be trusted with your data." />
           </Reveal>
-          <Reveal delay={0.1}>
-            {/* Spec sheet: one panel, cells split by hairlines */}
-            <ul className="grid gap-px overflow-hidden rounded-2xl border border-line bg-line shadow-card sm:grid-cols-2">
-              {[
-                { icon: KeyRound, t: "Official sign-in", d: <>Connects through official Google and Meta sign-in. We never see your passwords.</> },
-                { icon: Eye, t: "Read-only Google Ads", d: <>AdsAssist reports; it never changes campaigns, bids or budgets.</> },
-                {
-                  icon: ShieldCheck,
-                  t: "Hashed contact details",
-                  d: (
-                    <>
-                      Contact details are hashed (<code className="font-mono text-[0.9em] whitespace-nowrap text-ink">SHA-256</code>) before they reach any ad platform.
-                    </>
-                  ),
-                },
-                { icon: Users, t: "Role-based access", d: <>Role-based access in every workspace.</> },
-              ].map((s) => (
-                <li key={s.t} className="group relative bg-paper p-6 sm:p-8">
-                  <span className="absolute inset-x-0 top-0 h-0.5 origin-left scale-x-0 bg-blue transition-transform duration-500 group-hover:scale-x-100" aria-hidden />
-                  <span className="grid size-10 place-items-center rounded-xl bg-blue-soft text-blue transition-colors duration-300 group-hover:bg-blue group-hover:text-white">
-                    <s.icon className="size-5" aria-hidden />
-                  </span>
-                  <h3 className="mt-5 text-lg font-semibold">{s.t}</h3>
-                  <p className="mt-2 leading-relaxed text-ink-soft">{s.d}</p>
-                </li>
-              ))}
-            </ul>
-          </Reveal>
+          <ul className="mx-auto mt-14 grid max-w-5xl gap-4 sm:mt-20 sm:grid-cols-2 lg:gap-5">
+            {[
+              { icon: KeyRound, d: <>Connects through official Google and Meta sign-in. We never see your passwords.</> },
+              { icon: Eye, d: <>Read-only access to Google Ads. AdsAssist reports; it never changes campaigns, bids or budgets.</> },
+              {
+                icon: ShieldCheck,
+                d: (
+                  <>
+                    Contact details are hashed (<code className="font-mono text-[0.9em] whitespace-nowrap">SHA-256</code>) before they reach any ad platform.
+                  </>
+                ),
+              },
+              { icon: Users, d: <>Role-based access in every workspace.</> },
+            ].map((s, i) => (
+              <li key={i} className="h-full">
+                <Reveal delay={i * 0.08} className="h-full">
+                  <div className="h-full rounded-[28px] bg-paper p-7 sm:p-10">
+                    <s.icon className="size-8 text-blue" strokeWidth={1.5} aria-hidden />
+                    <p className="mt-6 text-[19px] leading-[1.4] font-semibold tracking-[-0.02em] text-pretty sm:text-[21px]">{s.d}</p>
+                  </div>
+                </Reveal>
+              </li>
+            ))}
+          </ul>
         </Container>
       </section>
 
-      <FaqSection items={FAQS} />
+      <FaqSection items={FAQS} title="FAQ" eyebrow={null} />
       <CtaBand title="Stop paying for leads that never close." body="Book a demo and we'll show you, on your own ad accounts, which campaigns bring customers." />
     </>
+  )
+}
+
+/** Spec-sheet list: hairline rows with a small blue check. */
+function PointList({ points, className }: { points: string[]; className?: string }) {
+  return (
+    <ul className={className}>
+      {points.map((p) => (
+        <li key={p} className="flex gap-3 border-t border-line py-3.5 text-[17px] leading-snug text-ink-soft last:border-b">
+          <Check className="mt-0.5 size-5 shrink-0 text-blue" strokeWidth={2.25} aria-hidden />
+          <span>{p}</span>
+        </li>
+      ))}
+    </ul>
   )
 }

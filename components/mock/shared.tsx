@@ -1,13 +1,13 @@
 "use client"
 
 import { animate, useInView, useMotionValue, useReducedMotion, useTransform, motion } from "motion/react"
-import { createContext, useContext, useEffect, useRef } from "react"
+import { createContext, useContext, useEffect, useRef, useSyncExternalStore } from "react"
 import { cn } from "@/lib/cn"
 
 /** Product-screen frame: a window with the app's chrome, used by every mockup. */
 export function AppWindow({ title, children, className }: { title: string; children: React.ReactNode; className?: string }) {
   return (
-    <div className={cn("overflow-hidden rounded-2xl border border-line bg-paper shadow-float", className)}>
+    <div className={cn("overflow-hidden rounded-2xl border border-line bg-paper shadow-float dark:border-line-strong", className)}>
       <div className="flex items-center gap-2 border-b border-line bg-mist px-4 py-2.5">
         <span className="size-2.5 rounded-full bg-[#ff5f57]" />
         <span className="size-2.5 rounded-full bg-[#febc2e]" />
@@ -40,10 +40,15 @@ export function CountUp({
   const ref = useRef<HTMLSpanElement>(null)
   const inView = useInView(ref, { once: true })
   const reduce = useReducedMotion()
-  const value = useMotionValue(reduce ? to : 0)
+  // Always start from 0 so server and client render the same text (the server can't know about reduced motion).
+  const value = useMotionValue(0)
   const text = useTransform(value, (v) => prefix + (decimals ? v.toFixed(decimals) : inr.format(Math.round(v))) + suffix)
   useEffect(() => {
-    if (!inView || reduce) return
+    if (reduce) {
+      value.set(to)
+      return
+    }
+    if (!inView) return
     const c = animate(value, to, { duration, ease: [0.22, 1, 0.36, 1] })
     return () => c.stop()
   }, [inView, reduce, to, duration, value])
@@ -69,6 +74,15 @@ export function GoogleDot({ className }: { className?: string }) {
 }
 export function MetaDot({ className }: { className?: string }) {
   return <span className={cn("inline-block size-2 rounded-full bg-meta", className)} aria-hidden />
+}
+
+const noop = () => () => {}
+/**
+ * False during server render and hydration, true after. Lets a component show its
+ * reduced-motion end state without the first client render differing from the server's HTML.
+ */
+export function useHydrated() {
+  return useSyncExternalStore(noop, () => true, () => false)
 }
 
 /** Set to true around mockups rendered only to reserve space (invisible), so their loops never run. */

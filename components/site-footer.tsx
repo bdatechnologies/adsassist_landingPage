@@ -1,45 +1,49 @@
 import Link from "next/link"
 import { Container } from "@/components/ui"
-import { COMPANY, CONTACT_EMAIL } from "@/lib/site"
+import { COMPANY } from "@/lib/site"
 
-const COLUMNS = [
-  { title: "Product", links: [{ href: "/#features", label: "Features" }, { href: "/#how-it-works", label: "How it works" }, { href: "/#security", label: "Security" }, { href: "/demo", label: "Book a demo" }] },
-  { title: "Industries", links: [{ href: "/edtech", label: "EdTech" }, { href: "/saas", label: "SaaS" }, { href: "/fintech", label: "Fintech" }, { href: "/real-estate", label: "Real estate" }, { href: "/agencies", label: "For agencies" }] },
-  { title: "Company", links: [{ href: "/about", label: "About" }, { href: "/privacy", label: "Privacy policy" }, { href: "/terms", label: "Terms" }, { href: `mailto:${CONTACT_EMAIL}`, label: CONTACT_EMAIL }] },
+// Exactly the footer line of the copy doc (Home.md, section 12), in its order.
+const LINKS = [
+  { href: "/#features", label: "Features" },
+  { href: "/edtech", label: "EdTech" },
+  { href: "/saas", label: "SaaS" },
+  { href: "/fintech", label: "Fintech" },
+  { href: "/real-estate", label: "Real estate" },
+  { href: "/agencies", label: "For agencies" },
+  { href: "/about", label: "About" },
+  { href: "/#security", label: "Security" },
+  { href: "/privacy", label: "Privacy policy" },
+  { href: "/terms", label: "Terms" },
 ]
 
 export function SiteFooter() {
   return (
-    <footer className="border-t border-line bg-mist">
-      <Container className="grid gap-10 py-14 md:grid-cols-[1.4fr_repeat(3,1fr)]">
-        <div className="max-w-xs">
+    <footer className="bg-mist">
+      <Container className="py-12 sm:py-14">
+        <Link href="/" className="inline-block" aria-label="AdsAssist home">
           {/* eslint-disable-next-line @next/next/no-img-element */}
-          <img src="/brand/AdsAssist_Logo.svg" alt="AdsAssist" width={147} height={36} className="h-8 w-auto dark:hidden" />
+          <img src="/brand/AdsAssist_Logo.svg" alt="AdsAssist" width={147} height={36} className="h-7 w-auto dark:hidden" />
           {/* eslint-disable-next-line @next/next/no-img-element */}
-          <img src="/brand/AdsAssist_Logo_For_Dark.svg" alt="AdsAssist" width={147} height={36} className="hidden h-8 w-auto dark:block" />
-          <p className="mt-4 text-sm leading-relaxed text-ink-muted">Know which ad brought every customer. Google Ads and Meta, connected to your leads and sales.</p>
-        </div>
-        {COLUMNS.map((c) => (
-          <div key={c.title}>
-            <p className="text-sm font-semibold">{c.title}</p>
-            <ul className="mt-3 space-y-2">
-              {c.links.map((l) => (
-                <li key={l.href}>
-                  <Link href={l.href} className="text-sm text-ink-muted transition-colors hover:text-ink">
-                    {l.label}
-                  </Link>
-                </li>
-              ))}
-            </ul>
-          </div>
-        ))}
-      </Container>
-      <div className="border-t border-line">
-        <Container className="flex flex-col gap-2 py-6 text-sm text-ink-muted sm:flex-row sm:items-center sm:justify-between">
+          <img src="/brand/AdsAssist_Logo_For_Dark.svg" alt="AdsAssist" width={147} height={36} className="hidden h-7 w-auto dark:block" />
+        </Link>
+
+        <nav aria-label="Footer" className="mt-8">
+          <ul className="grid grid-cols-2 gap-x-6 sm:flex sm:flex-wrap sm:gap-x-7 sm:gap-y-1">
+            {LINKS.map((l) => (
+              <li key={l.href}>
+                <Link href={l.href} className="inline-flex min-h-11 items-center text-sm text-ink-soft transition-colors hover:text-ink sm:min-h-9">
+                  {l.label}
+                </Link>
+              </li>
+            ))}
+          </ul>
+        </nav>
+
+        <div className="mt-8 flex flex-col gap-2 border-t border-line pt-6 text-xs text-ink-muted sm:flex-row sm:items-center sm:justify-between">
           <p>© {new Date().getFullYear()} AdsAssist</p>
-          <p>A product by {COMPANY}</p>
-        </Container>
-      </div>
+          <p>A Product by {COMPANY}</p>
+        </div>
+      </Container>
     </footer>
   )
 }

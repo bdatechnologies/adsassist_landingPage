@@ -13,33 +13,25 @@ const ICONS: Record<(typeof INDUSTRIES)[number]["href"], LucideIcon> = {
 
 export function Industries() {
   return (
-    <section className="border-y border-line bg-mist py-20 sm:py-28">
+    <section className="bg-mist py-24 sm:py-32">
       <Container>
         <Reveal>
-          <SectionHeading eyebrow="Built for your business" title="Made for businesses where a lead isn't a sale yet." />
+          <SectionHeading center eyebrow="Built for your business" title="Made for businesses where a lead isn't a sale yet." />
         </Reveal>
-        <div className="mt-12 grid gap-4 sm:grid-cols-2 lg:grid-cols-4 [&>*]:min-w-0">
+        <div className="mt-14 grid gap-4 sm:mt-20 sm:grid-cols-2 lg:grid-cols-4 lg:gap-5 *:min-w-0">
           {INDUSTRIES.map((ind, i) => {
             const Icon = ICONS[ind.href]
             return (
               <Reveal key={ind.href} delay={i * 0.08} className="h-full">
                 <Link
                   href={ind.href}
-                  className="group flex h-full flex-col rounded-2xl border border-line bg-paper transition-colors duration-300 hover:border-blue/30"
+                  className="group flex h-full flex-col lg:min-h-64 rounded-[28px] bg-paper p-7 transition-transform duration-500 ease-[var(--ease-out-expo)] hover:scale-[1.02] sm:p-8"
                 >
-                  <div className="flex flex-1 flex-col p-6">
-                    <div className="flex items-center gap-3">
-                      <span className="grid size-10 shrink-0 place-items-center rounded-xl bg-blue-soft text-blue transition-colors duration-300 group-hover:bg-blue group-hover:text-white">
-                        <Icon className="size-5" aria-hidden />
-                      </span>
-                      <h3 className="text-lg font-semibold">{ind.label}</h3>
-                    </div>
-                    <p className="mt-4 flex-1 leading-relaxed text-ink-soft">{ind.blurb}</p>
-                  </div>
-
-                  <span className="flex items-center justify-between border-t border-line px-6 py-4 text-sm font-semibold text-blue">
-                    Learn more
-                    <ArrowRight className="size-4 transition-transform duration-300 group-hover:translate-x-1" aria-hidden />
+                  <Icon className="size-8 text-blue" strokeWidth={1.5} aria-hidden />
+                  <h3 className="mt-6 text-2xl font-semibold tracking-[-0.025em]">{ind.label}</h3>
+                  <p className="mt-3 flex-1 text-[17px] leading-[1.45] text-pretty text-ink-soft">{ind.blurb}</p>
+                  <span className="mt-6 grid size-9 place-items-center self-end rounded-full bg-mist text-ink transition-colors duration-300 group-hover:bg-blue group-hover:text-white" aria-hidden>
+                    <ArrowRight className="size-4 transition-transform duration-300 group-hover:translate-x-0.5" />
                   </span>
                 </Link>
               </Reveal>

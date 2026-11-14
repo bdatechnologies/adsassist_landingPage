@@ -7,14 +7,15 @@
 @theme {
   --font-sans: var(--font-inter), ui-sans-serif, system-ui, sans-serif;
 
-  --color-ink: #0b1220;
-  --color-ink-soft: #3d4757;
-  --color-ink-muted: #667085;
-  --color-line: #e6e8ee;
-  --color-line-strong: #d3d7e0;
+  /* Neutrals: one near-black for text, a soft grey for alternating bands, hairlines instead of borders. */
+  --color-ink: #1d1d1f;
+  --color-ink-soft: #424245;
+  --color-ink-muted: #6e6e73;
+  --color-line: #e0e0e5;
+  --color-line-strong: #d2d2d7;
   --color-paper: #ffffff;
-  --color-mist: #f6f7fa;
-  --color-navy: #061d50;
+  --color-mist: #f5f5f7;
+  --color-navy: #000000; /* dark band: black tile */
 
   --color-cyan: #05c4f4;
   --color-blue: #075cf6;
@@ -28,26 +29,30 @@
   --color-warn: #f59e0b;
   --color-meta: #8b5cf6;
 
-  --shadow-card: 0 1px 2px rgb(11 18 32 / 0.04), 0 8px 24px rgb(11 18 32 / 0.06);
-  --shadow-float: 0 2px 6px rgb(11 18 32 / 0.06), 0 24px 60px rgb(7 92 246 / 0.12);
+  /* Chrome stays flat; only product screens get the one soft "resting on a surface" shadow. */
+  --shadow-card: 0 1px 2px rgb(0 0 0 / 0.04);
+  --shadow-float: 0 4px 12px rgb(0 0 0 / 0.04), 0 30px 60px -12px rgb(0 0 0 / 0.18);
+
+  --ease-soft: cubic-bezier(0.25, 0.1, 0.25, 1);
+  --ease-out-expo: cubic-bezier(0.16, 1, 0.3, 1);
 }
 
 /*
  * Dark theme. Surfaces alternate between two colours only:
- *   paper (#0a0a0a) and mist (#171717). Navy bands become mist so the rhythm holds.
+ *   paper (#000000) and mist (#161617). Navy bands become mist so the rhythm holds.
  */
 @layer base {
   html.dark {
     color-scheme: dark;
 
-    --color-ink: #f5f5f5;
-    --color-ink-soft: #b4b4b4;
-    --color-ink-muted: #8c8c8c;
-    --color-line: #262626;
-    --color-line-strong: #363636;
-    --color-paper: #0a0a0a;
-    --color-mist: #171717;
-    --color-navy: #171717;
+    --color-ink: #f5f5f7;
+    --color-ink-soft: #a1a1a6;
+    --color-ink-muted: #86868b;
+    --color-line: #2c2c2e;
+    --color-line-strong: #3a3a3c;
+    --color-paper: #000000;
+    --color-mist: #161617;
+    --color-navy: #161617;
 
     --color-blue: #3d7dff;
     --color-blue-soft: #0f1b33;
@@ -55,8 +60,8 @@
     --color-good-soft: #0d2419;
     --color-bad-soft: #2a1213;
 
-    --shadow-card: 0 1px 2px rgb(0 0 0 / 0.4), 0 8px 24px rgb(0 0 0 / 0.35);
-    --shadow-float: 0 2px 6px rgb(0 0 0 / 0.4), 0 24px 60px rgb(0 0 0 / 0.5);
+    --shadow-card: 0 1px 2px rgb(0 0 0 / 0.4);
+    --shadow-float: 0 4px 12px rgb(0 0 0 / 0.4), 0 30px 60px -12px rgb(0 0 0 / 0.7);
   }
 }
 
@@ -70,6 +75,8 @@
     color: var(--color-ink);
     font-family: var(--font-sans);
     -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+    text-rendering: optimizeLegibility;
   }
   ::selection {
     background: rgb(7 92 246 / 0.15);

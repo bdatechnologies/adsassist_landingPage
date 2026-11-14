@@ -111,7 +111,7 @@ export function ProductFilm() {
         Every scene sits in the same grid cell. The inactive copies are invisible and paused; they only
         reserve space, so the frame is always as tall as the tallest scene and the controls below never move.
       */}
-      <div className="relative grid *:[grid-area:1/1]">
+      <div className="relative grid grid-cols-[minmax(0,1fr)] *:[grid-area:1/1]">
         {SCENES.map((s) => (
           <div key={s.key} className="invisible" aria-hidden inert>
             <LoopPausedContext value={true}>{s.render()}</LoopPausedContext>
@@ -133,7 +133,7 @@ export function ProductFilm() {
       <div className="mt-4 flex items-start gap-3">
         <button
           onClick={() => setPaused((p) => !p)}
-          className="grid size-9 shrink-0 place-items-center rounded-full border border-line bg-paper text-ink-soft shadow-card transition-colors hover:text-ink"
+          className="grid size-11 shrink-0 place-items-center rounded-full border border-line bg-paper text-ink-soft shadow-card transition-colors hover:text-ink sm:size-9"
           aria-label={paused ? "Play product tour" : "Pause product tour"}
         >
           {paused ? <Play className="size-4" /> : <Pause className="size-4" />}

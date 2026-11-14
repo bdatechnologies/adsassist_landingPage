@@ -4,7 +4,7 @@ import { AnimatePresence, motion } from "motion/react"
 import { useEffect, useState } from "react"
 import { AlertTriangle, ArrowRight, Check, MousePointerClick, Sparkles, TrendingUp, Users } from "lucide-react"
 import { cn } from "@/lib/cn"
-import { AppWindow, useLoopInView } from "./shared"
+import { AppWindow, useHydrated, useLoopInView } from "./shared"
 
 /* ───────────── Wasted spend: keywords table that flags zero-conversion spend ───────────── */
 
@@ -351,7 +351,10 @@ const SUMMARY = "Spend rose 12% while leads rose 18%. L1 Personal Loan is your m
 
 export function InsightsMock() {
   const { ref, active, reduce } = useLoopInView<HTMLDivElement>()
-  const [chars, setChars] = useState(reduce ? SUMMARY.length : 0)
+  const [chars, setChars] = useState(0)
+  // With reduced motion the full summary shows, but only after hydration so the first render matches the server.
+  const hydrated = useHydrated()
+  const shown = hydrated && reduce ? SUMMARY.length : chars
   useEffect(() => {
     if (!active) return
     const t = setInterval(() => setChars((c) => (c >= SUMMARY.length + 40 ? 0 : c + 2)), 45)
@@ -365,7 +368,7 @@ export function InsightsMock() {
             <Sparkles className="size-3.5" aria-hidden /> AI summary · this week
           </p>
           <p className="mt-2 min-h-[3.75rem] text-xs leading-relaxed text-ink-soft">
-            {SUMMARY.slice(0, Math.min(chars, SUMMARY.length))}
+            {SUMMARY.slice(0, Math.min(shown, SUMMARY.length))}
             <span className="ml-0.5 inline-block h-3 w-px translate-y-0.5 animate-pulse bg-ink" />
           </p>
         </div>

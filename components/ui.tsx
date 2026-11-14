@@ -8,10 +8,7 @@ export function Container({ className, children }: { className?: string; childre
 
 export function Eyebrow({ children, className }: { children: React.ReactNode; className?: string }) {
   return (
-    <p className={cn("inline-flex items-center gap-2 text-[13px] font-semibold tracking-wide text-blue uppercase", className)}>
-      <span className="bg-brand h-1.5 w-1.5 rounded-full" aria-hidden />
-      {children}
-    </p>
+    <p className={cn("inline-flex items-center text-[15px] font-semibold tracking-[-0.01em] text-blue sm:text-[17px]", className)}>{children}</p>
   )
 }
 
@@ -29,20 +26,22 @@ export function SectionHeading({
   className?: string
 }) {
   return (
-    <div className={cn("max-w-2xl", center && "mx-auto text-center", className)}>
+    // A max-w-* in className replaces the default width (cn does not merge classes).
+    <div className={cn(!className?.includes("max-w-") && "max-w-2xl", center && "mx-auto text-center", className)}>
       {eyebrow ? <Eyebrow className={center ? "justify-center" : undefined}>{eyebrow}</Eyebrow> : null}
-      <h2 className="mt-3 text-3xl leading-[1.15] font-semibold tracking-tight text-balance sm:text-[40px]">{title}</h2>
-      {lead ? <p className="mt-4 text-lg leading-relaxed text-pretty text-ink-soft">{lead}</p> : null}
+      <h2 className="mt-3 text-[32px] leading-[1.1] font-semibold tracking-[-0.03em] text-balance sm:text-[44px] sm:leading-[1.08] lg:text-[48px]">{title}</h2>
+      {lead ? <p className="mt-5 text-[17px] leading-[1.5] tracking-[-0.01em] text-pretty text-ink-soft sm:text-[19px]">{lead}</p> : null}
     </div>
   )
 }
 
+// Pill buttons: flat, no glow, and a quick press-down on :active.
 const base =
-  "inline-flex items-center justify-center gap-2 rounded-xl font-semibold whitespace-nowrap transition-[transform,box-shadow,background-color,color] duration-200 active:translate-y-px"
-const sizes = { md: "h-11 px-5 text-[15px]", lg: "h-12 px-6 text-base", sm: "h-9 px-4 text-sm" }
+  "inline-flex items-center justify-center gap-1.5 rounded-full font-medium tracking-[-0.01em] whitespace-nowrap transition-[transform,background-color,color,border-color,filter] duration-200 ease-[var(--ease-soft)] active:scale-[0.97] active:duration-100"
+const sizes = { sm: "h-10 px-4 text-sm", md: "h-11 px-[22px] text-[15px]", lg: "h-12 px-7 text-[17px]", xl: "h-14 px-9 text-[17px]" }
 const variants = {
-  primary: "bg-brand text-white shadow-[0_8px_24px_-8px_rgb(7_92_246/0.6)] hover:shadow-[0_12px_30px_-8px_rgb(116_0_239/0.55)]",
-  secondary: "border border-line-strong bg-paper text-ink hover:border-ink-muted",
+  primary: "bg-brand text-white hover:brightness-110",
+  secondary: "border border-blue bg-paper text-blue hover:bg-blue hover:text-white",
   ghost: "text-ink-soft hover:text-ink",
 }
 
